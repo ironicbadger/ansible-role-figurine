@@ -35,17 +35,21 @@
 
 ## install
 - block:
+    - name: Set Arch 
+      set_fact:
+        arch: "{% if '{{ ansible_architecture }}==x86_64' %}amd64{% else %} '{{ ansible_architecture }}' {% endif %}"
+
     ## v1.2.1 changed naming scheme
     - name: Set Download URL for v < 1.2.1
       set_fact:
         figurine_pkg_path: "v{{ figurine_ver }}/figurine_linux_v{{ figurine_ver }}.tar.gz"
-      when: figurine_ver < 1.2.1
+      when: figurine_ver is version('1.2.1', '<')
 
     - name: Set Download URL for v > 1.2.0
       set_fact:
-        figurine_pkg_path: "v{{ figurine_ver }}/figurine_linux_{{ ansible_facts['architecture'] }}_v{{ figurine_ver }}.tar.gz"
-      when: figurine_ver > 1.2.0
-
+        figurine_pkg_path: "v{{ figurine_ver }}/figurine_linux_{{ arch }}_v{{ figurine_ver }}.tar.gz"
+      when: figurine_ver is version('1.2.0', '>')
+    
     - name: Extract figurine download into install path
       unarchive:
         remote_src: true
