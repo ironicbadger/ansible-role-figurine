@@ -72,3 +72,4 @@
   template:
     src: figurine.sh.j2
     dest: /etc/profile.d/figurine.sh
+  when: figurine_install_login_script
