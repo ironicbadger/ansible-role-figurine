@@ -15,6 +15,7 @@
   changed_when: false
   register: installed_version_registered
   when: figurine_is_installed == True
+  check_mode: false
 
 - name: get latest release
   uri:
@@ -22,6 +23,7 @@
     return_content: true
   register: release_version_registered
   when: figurine_download_latest_ver == True
+  check_mode: false
 
 - name: set figurine version (latest)
   set_fact:
